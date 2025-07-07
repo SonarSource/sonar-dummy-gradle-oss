@@ -10,4 +10,3 @@ when the project is released.
 Looking for one not published on Maven Central?
 
 Please have a look at [sonar-dummy (use maven)](https://github.com/SonarSource/sonar-dummy).
-
