@@ -24,7 +24,7 @@ jar {
 sonarqube {
   properties {
     property 'sonar.projectName', 'SonarSource :: dummy :: Plugin'
-    property 'sonar.moduleKey', 'org.sonarsource.dummy:sonar-dummy-oss-plugin'
+    property 'sonar.moduleKey', 'org.sonarsource.dummy:sonar-dummy-gradle-oss-plugin'
   }
 }
 
@@ -48,7 +48,7 @@ publishing {
           }
         }
         scm {
-          url = 'https://github.com/SonarSource/sonar-dummy-oss-plugin'
+          url = 'https://github.com/SonarSource/sonar-dummy-gradle-oss-plugin'
         }
         developers {
           developer {

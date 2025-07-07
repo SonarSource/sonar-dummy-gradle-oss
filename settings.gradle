@@ -23,5 +23,5 @@ buildCache {
   }
 }
 
-rootProject.name = 'sonar-dummy-oss'
-include ':sonar-dummy-oss-plugin'
+rootProject.name = 'sonar-dummy-gradle-oss'
+include ':sonar-dummy-gradle-oss-plugin'
