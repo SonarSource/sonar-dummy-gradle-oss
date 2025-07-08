@@ -16,6 +16,5 @@ jobs:
       publishToBinaries: true
       mavenCentralSync: true
       publicRelease: true
-      slackChannel: squad-eng-xp-notifs
       publishJavadoc: true
       isDummyProject: true
