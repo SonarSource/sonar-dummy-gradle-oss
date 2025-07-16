@@ -22,47 +22,20 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: jdx/mise-action@5cb1df66ed5e1fb3c670ea0b62fd17a76979826a # v2.3.1
-        env:
-            GITHUB_TOKEN: ${{ github.token }}
-        
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
-      - name: Cache local Maven repository
-        uses: SonarSource/ci-github-actions/cache@master
-        with:
-          path: ${{ github.workspace }}/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}
-          restore-keys: gradle-${{ runner.os }}-
+      - id: get-build-number
+        uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
       - name: Vault
         id: secrets
         uses: SonarSource/vault-action-wrapper@d6d745ffdbc82b040df839b903bc33b5592cd6b0 # 3.0.2
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_PRIVATE_PASSWORD;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
-            development/kv/data/next url | SONAR_HOST_URL;
-            development/kv/data/next token | SONAR_TOKEN;
-            development/kv/data/sign key | SIGN_KEY;
-            development/kv/data/sign passphrase | PGP_PASSPHRASE;
-            development/kv/data/sign key_id | SIGN_KEY_ID;
-            development/kv/data/develocity token | DEVELOCITY_TOKEN;
       - name: Build, Analyze and deploy
         id: build
-        env:
-          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-        #   GH_TOKEN: ${{ github.token }}
-          SONAR_HOST_URL: ${{ fromJSON(steps.secrets.outputs.vault).SONAR_HOST_URL }}
-          SONAR_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).SONAR_TOKEN }}
-          SIGN_KEY: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY }}
-          PGP_PASSPHRASE: ${{ fromJSON(steps.secrets.outputs.vault).PGP_PASSPHRASE }}
-          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_PRIVATE_PASSWORD }}
-          #ARTIFACTORY_DEPLOY_REPO: "sonarsource-private-qa"
-          ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
-          ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
-          DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ fromJSON(steps.secrets.outputs.vault).PGP_PASSPHRASE }}
-          ORG_GRADLE_PROJECT_signingKeyId: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY_ID }}
-        run: |
-          ls -la
-          regular_gradle_build_deploy_analyze
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8098
+        with:
+          artifactory-deploy-username: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
+          artifactory-deploy-password: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
+          artifactory-deploy-repo: "sonarsource-public-qa"
+          deploy-pull-request: true

@@ -1,26 +1,12 @@
 plugins {
-  id "com.gradle.develocity" version "4.0.2"
   id "com.gradle.common-custom-user-data-gradle-plugin" version "2.3"
 }
 
 def isCI = System.getenv('CI') != null
 
-develocity {
-  server = "https://develocity.sonar.build"
-  buildScan {
-    capture {
-      buildLogging = !startParameter.taskNames.contains("properties")
-    }
-  }
-}
-
 buildCache {
   local {
     enabled = !isCI
-  }
-  remote(develocity.buildCache) {
-    enabled = true
-    push = isCI
   }
 }
 
