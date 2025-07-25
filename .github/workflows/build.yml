@@ -34,12 +34,12 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszn/BUILD-8643 # dogfood
         with:
-          artifactory-deploy-username: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
-          artifactory-deploy-password: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
-          artifactory-deploy-repo: "sonarsource-public-qa"
           deploy-pull-request: true
+          primary-sonar-platform: next
+          artifactory-deploy-repo: sonarsource-public-qa
+          public: false
 
   promote:
     needs:
