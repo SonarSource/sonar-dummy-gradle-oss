@@ -36,10 +36,10 @@ jobs:
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
         with:
-          artifactory-deploy-username: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
-          artifactory-deploy-password: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
-          artifactory-deploy-repo: "sonarsource-public-qa"
           deploy-pull-request: true
+          sonar-platform: next
+          artifactory-deploy-repo: sonarsource-public-qa
+          public: false
 
   promote:
     needs:
