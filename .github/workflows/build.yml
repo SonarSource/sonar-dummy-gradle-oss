@@ -30,6 +30,7 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+          gradle-version: wrapper
 
   promote:
     needs:
