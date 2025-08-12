@@ -32,7 +32,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/gradle-version # dogfood
         with:
           deploy-pull-request: true
           sonar-platform: next
