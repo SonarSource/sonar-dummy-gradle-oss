@@ -38,7 +38,6 @@ jobs:
           sonar-platform: next
           artifactory-deploy-repo: sonarsource-public-qa
           public: false
-          gradle-version: 8.14.3
 
   promote:
     needs:
