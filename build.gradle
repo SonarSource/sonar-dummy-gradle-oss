@@ -40,19 +40,14 @@ allprojects {
     def signingPassword = findProperty("signingPassword")
     useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
     required {
-      def branch = System.getenv()["CIRRUS_BRANCH"]
-      return (branch == 'master' || branch ==~ 'branch-[\\d.]+') &&
-        gradle.taskGraph.hasTask(":artifactoryPublish")
+      return gradle.taskGraph.hasTask(":artifactoryPublish")
     }
     sign publishing.publications
   }
 
   tasks.withType(Sign) {
     onlyIf {
-      def branch = System.getenv()["CIRRUS_BRANCH"]
-      return !artifactoryPublish.skip &&
-        (branch == 'master' || branch ==~ 'branch-[\\d.]+') &&
-        gradle.taskGraph.hasTask(":artifactoryPublish")
+      return !artifactoryPublish.skip && gradle.taskGraph.hasTask(":artifactoryPublish")
     }
   }
 }
@@ -111,7 +106,7 @@ artifactory {
     repository {
       repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO')
       username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME')
-      password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD')
+      password = System.getenv('ARTIFACTORY_DEPLOY_ACCESS_TOKEN')
     }
     defaults {
       properties = [
