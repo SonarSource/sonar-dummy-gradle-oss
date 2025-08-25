@@ -25,11 +25,13 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8926-develocity # dogfood
         with:
           deploy-pull-request: true
-          artifactory-reader-role: private-reader
-          artifactory-deployer-role: qa-deployer
+          sonar-platform: next
+          artifactory-deploy-repo: sonarsource-public-qa
+          public: false
+          use-develocity: true
 
   promote:
     needs:
@@ -43,4 +45,4 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: SonarSource/ci-github-actions/promote@master #dogfood
