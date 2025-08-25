@@ -3,14 +3,15 @@ plugins {
   id 'signing'
   id "com.jfrog.artifactory" version "4.26.1"
   id "org.cyclonedx.bom" version "1.5.0"
-  id "org.sonarqube" version "4.4.1.3373"
+  id "org.sonarqube" version "5.0.0.4638"
 }
 
 // Analyze with SonarQube!
 sonarqube {
   properties {
-    property 'sonar.projectName', 'SonarSource :: dummy'
-    property 'sonar.projectKey', 'org.sonarsource.dummy:dummy-oss'
+    property 'sonar.projectName', 'sonar-dummy-gradle-oss'
+    property 'sonar.projectKey', 'SonarSource_sonar-dummy-gradle-oss'
+    property 'sonar.organization', 'sonarsource'
   }
 }
 
