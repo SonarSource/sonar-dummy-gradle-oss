@@ -13,7 +13,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
-    runs-on: sonar-s-public
+    runs-on: github-ubuntu-latest-s
     name: Build
     permissions:
       id-token: write
@@ -25,7 +25,7 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/8977-gradle-cache # dogfood
         with:
           deploy-pull-request: true
           sonar-platform: next
@@ -33,16 +33,37 @@ jobs:
           artifactory-deployer-role: qa-deployer
           use-develocity: true
 
-  promote:
-    needs:
-      - build
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
-    runs-on: github-ubuntu-latest-s
-    name: Promote
+  build2:
+    runs-on: sonar-s
+    name: Build 2
+    needs: [build]
     permissions:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+        with:
+          version: 2025.7.12
+      - name: Build, Analyze and deploy
+        id: build
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/8977-gradle-cache # dogfood
+        with:
+          deploy-pull-request: true
+          sonar-platform: next
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+
+  # promote:
+  #   needs:
+  #     - build
+  #   concurrency:
+  #     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  #     cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+  #   runs-on: github-ubuntu-latest-s
+  #   name: Promote
+  #   permissions:
+  #     id-token: write
+  #     contents: write
+  #   steps:
+  #     - uses: SonarSource/ci-github-actions/promote@master # dogfood
