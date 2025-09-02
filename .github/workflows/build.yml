@@ -13,12 +13,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  get-build-number:
+    runs-on: sonar-xs-public
+    name: Get build number
+    permissions:
+      id-token: write
+    steps:
+      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+
   build:
     runs-on: sonar-s-public
     name: Build
     permissions:
       id-token: write
       contents: write
+    needs: get-build-number
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
@@ -38,6 +47,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+    needs: get-build-number
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
