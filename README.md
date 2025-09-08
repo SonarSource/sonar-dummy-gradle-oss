@@ -1,5 +1,9 @@
 # sonar-dummy-gradle-oss
 
+[![Quality Gate Status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-dummy-gradle-oss&metric=alert_status)](https://next.sonarqube.com/sonarqube/dashboard?id=SonarSource_sonar-dummy-gradle-oss)
+[![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-dummy-gradle-oss&metric=coverage)](https://next.sonarqube.com/sonarqube/dashboard?id=SonarSource_sonar-dummy-gradle-oss)
+[![Releasability status](https://github.com/SonarSource/sonar-dummy-gradle-oss/actions/workflows/releasability.yml/badge.svg)](https://github.com/SonarSource/sonar-dummy-gradle-oss/actions/workflows/releasability.yml)
+
 A sample project used for testing purposes.
 
 This project uses **gradle** and **is published on Maven central**.
