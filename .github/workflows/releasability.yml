@@ -1,22 +1,24 @@
-# yamllint disable rule:line-length
----
-name: Releasability status
-'on':
-  check_suite:
+name: Releasability Status
+on:
+  workflow_run:
+    workflows: ["Build"]
     types:
       - completed
+    branches:
+      - master
+      - dogfood-*
+      - branch-*
+
 jobs:
-  update_releasability_status:
-    runs-on: ubuntu-24.04-large
+  releasability-status:
     name: Releasability status
+    runs-on: github-ubuntu-latest-s
     permissions:
       id-token: write
       statuses: write
       contents: read
-    if: >-
-      (contains(fromJSON('["main", "master"]'), github.event.check_suite.head_branch) || startsWith(github.event.check_suite.head_branch, 'dogfood-') || startsWith(github.event.check_suite.head_branch, 'branch-'))
-      && github.event.check_suite.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - uses: SonarSource/gh-action_releasability/releasability-status@48220006021661f66278901a369cfede25b1d458 # 2.2.0
+      - uses: SonarSource/gh-action_releasability/releasability-status@master # dogfood
         env:
           GITHUB_TOKEN: ${{ github.token }}
