@@ -14,12 +14,15 @@ concurrency:
 
 jobs:
   get-build-number:
+    outputs:
+      BUILD_NUMBER: ${{ steps.get-build-number.outputs.BUILD_NUMBER }}
     runs-on: sonar-xs-public
     name: Get build number
     permissions:
       id-token: write
     steps:
       - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+        id: get-build-number
 
   build:
     runs-on: sonar-s-public
@@ -36,6 +39,8 @@ jobs:
       - name: Build, Analyze and deploy
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        env:
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
@@ -54,6 +59,8 @@ jobs:
         with:
           version: 2025.7.12
       - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        env:
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy-pull-request: false
           artifactory-reader-role: private-reader
@@ -62,6 +69,7 @@ jobs:
 
   promote:
     needs:
+      - get-build-number
       - build
       - build-windows
     runs-on: github-ubuntu-latest-s
@@ -71,5 +79,7 @@ jobs:
       contents: write
     steps:
       - uses: SonarSource/ci-github-actions/promote@master # dogfood
+        env:
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           promote-pull-request: true
