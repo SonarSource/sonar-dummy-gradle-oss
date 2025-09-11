@@ -55,7 +55,7 @@ jobs:
           fi
 
   build-windows:
-    runs-on: github-windows-latest-s
+    runs-on: warp-custom-windows-2022-s
     name: Build Windows
     permissions:
       id-token: write
