@@ -49,6 +49,9 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+          cache-paths: |
+            /tmp/cache
+            ${GRADLE_USER_HOME}/caches
 
   build-windows:
     runs-on: github-windows-latest-s
