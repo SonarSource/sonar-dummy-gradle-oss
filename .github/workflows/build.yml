@@ -42,7 +42,7 @@ jobs:
           touch /tmp/cache/test.txt
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-9332-caching-maven # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@ffeat/mmatuszny/BUILD-8810-promote-version # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
@@ -65,7 +65,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8810-promote-version # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
@@ -85,7 +85,7 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: SonarSource/ci-github-actions/promote@feat/mmatuszny/BUILD-8810-promote-version # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
