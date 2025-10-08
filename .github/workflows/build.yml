@@ -38,7 +38,7 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@ffeat/mmatuszny/BUILD-8810-promote-version # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8810-promote-version # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
