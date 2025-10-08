@@ -26,7 +26,7 @@ jobs:
 
   build:
     runs-on: sonar-s-public
-    name: Build
+    name: Build linux
     permissions:
       id-token: write
       contents: write
@@ -36,15 +36,23 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
+      - name: Create file
+        run: |
+          mkdir -p ./tmp
+          echo "test" > ./tmp/file
+
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8810-promote-version # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-9332-caching-maven # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+          cache-paths: |
+            ~/.gradle/caches
+            ./tmp/file
 
   build-windows:
     runs-on: github-windows-latest-s
@@ -58,7 +66,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-8810-promote-version # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/BUILD-9332-caching-maven # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
@@ -78,7 +86,7 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@feat/mmatuszny/BUILD-8810-promote-version # dogfood
+      - uses: SonarSource/ci-github-actions/promote@feat/mmatuszny/BUILD-9314-promote-improvements # dogfood
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
