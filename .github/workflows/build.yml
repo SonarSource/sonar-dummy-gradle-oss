@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - branch-*
+      - feat/mmatuszny/*
   pull_request:
   merge_group:
   workflow_dispatch:
