@@ -13,73 +13,67 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  get-build-number:
-    outputs:
-      BUILD_NUMBER: ${{ steps.get-build-number.outputs.BUILD_NUMBER }}
-    runs-on: sonar-xs-public
-    name: Get build number
-    permissions:
-      id-token: write
-    steps:
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
-        id: get-build-number
+  # get-build-number:
+  #   outputs:
+  #     BUILD_NUMBER: ${{ steps.get-build-number.outputs.BUILD_NUMBER }}
+  #   runs-on: sonar-xs-public
+  #   name: Get build number
+  #   permissions:
+  #     id-token: write
+  #   steps:
+  #     - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+  #       id: get-build-number
 
-  build:
-    runs-on: sonar-s-public
-    name: Build
-    permissions:
-      id-token: write
-      contents: write
-    needs: get-build-number
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
-        with:
-          version: 2025.7.12
-      - name: Build, Analyze and deploy
-        id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
-        with:
-          deploy-pull-request: true
-          artifactory-reader-role: private-reader
-          artifactory-deployer-role: qa-deployer
+  # build:
+  #   runs-on: sonar-s-public
+  #   name: Build
+  #   permissions:
+  #     id-token: write
+  #     contents: write
+  #   needs: get-build-number
+  #   steps:
+  #     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  #     - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+  #       with:
+  #         version: 2025.7.12
+  #     - name: Build, Analyze and deploy
+  #       id: build
+  #       uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+  #       env:
+  #         BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+  #       with:
+  #         deploy-pull-request: true
+  #         artifactory-reader-role: private-reader
+  #         artifactory-deployer-role: qa-deployer
 
-  build-windows:
-    runs-on: github-windows-latest-s
-    name: Build Windows
-    permissions:
-      id-token: write
-      contents: write
-    needs: get-build-number
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
-        with:
-          version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
-        with:
-          deploy-pull-request: false
-          artifactory-reader-role: private-reader
-          artifactory-deployer-role: qa-deployer
-          use-develocity: true
+  # build-windows:
+  #   runs-on: github-windows-latest-s
+  #   name: Build Windows
+  #   permissions:
+  #     id-token: write
+  #     contents: write
+  #   needs: get-build-number
+  #   steps:
+  #     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  #     - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+  #       with:
+  #         version: 2025.7.12
+  #     - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+  #       env:
+  #         BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+  #       with:
+  #         deploy-pull-request: false
+  #         artifactory-reader-role: private-reader
+  #         artifactory-deployer-role: qa-deployer
+  #         use-develocity: true
 
-  promote:
-    needs:
-      - get-build-number
-      - build
-      - build-windows
+  develo:
     runs-on: github-ubuntu-latest-s
     name: Promote
     permissions:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
-        with:
-          promote-pull-request: true
+      - name: curl develocity
+        run: |
+          curl -I https://develocity.dev.sonar.build/
