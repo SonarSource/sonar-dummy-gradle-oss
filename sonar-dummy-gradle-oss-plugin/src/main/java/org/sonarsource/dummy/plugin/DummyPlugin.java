@@ -18,16 +18,16 @@
  */
 package org.sonarsource.dummy.plugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.sonar.api.SonarPlugin;
-import com.google.common.collect.Lists;
 
 public final class DummyPlugin extends SonarPlugin {
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
+  @SuppressWarnings({"rawtypes"})
   @Override
   public List getExtensions() {
-    return Lists.newArrayList();
+    return new ArrayList<>();
   }
 
 
