@@ -45,6 +45,14 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+      - name: verify build-gradle behavior
+        env:
+          DEPLOYED: ${{ steps.build.outputs.deployed }}
+        run: |
+          if [[ "$DEPLOYED" != "true" ]]; then
+              echo "ERROR: steps.build.outputs.deployed is not true"
+              exit 1
+          fi
 
   build-windows:
     runs-on: github-windows-latest-s
@@ -59,13 +67,23 @@ jobs:
         with:
           version: 2025.7.12
       - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        id: build
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
-          deploy-pull-request: false
+          deploy: false
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
           use-develocity: true
+      - name: verify build-gradle behavior
+        shell: bash
+        env:
+          DEPLOYED: ${{ steps.build.outputs.deployed }}
+        run: |
+          if [[ "$DEPLOYED" = "true" ]]; then
+              echo "ERROR: steps.build.outputs.deployed is true"
+              exit 1
+          fi
 
   promote:
     needs:
