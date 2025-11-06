@@ -54,6 +54,38 @@ jobs:
               exit 1
           fi
 
+  build-working-directory:
+    runs-on: sonar-s-public
+    name: Build with working directory
+    permissions:
+      id-token: write
+      contents: write
+    needs: get-build-number
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: subdir
+      - name: Workaround for setup-gradle which has no working-directory input
+        run: |
+          cp subdir/mise.toml mise.toml
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+          working_directory: subdir
+      - name: Build, Analyze and deploy
+        id: build
+        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        env:
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+        with:
+          deploy-pull-request: false
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          working-directory: subdir
+
   build-windows:
     runs-on: warp-custom-windows-2022-s
     name: Build Windows
