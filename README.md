@@ -14,3 +14,13 @@ when the project is released.
 Looking for one not published on Maven Central?
 
 Please have a look at [sonar-dummy (use maven)](https://github.com/SonarSource/sonar-dummy).
+
+## Artifact Verification
+
+Provenance attestations are available at: <https://github.com/SonarSource/sonar-dummy-gradle-oss/attestations>
+
+To verify an artifact:
+
+```bash
+gh attestation verify <artifact-file> --repo SonarSource/sonar-dummy-gradle-oss
+```
