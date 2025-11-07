@@ -30,6 +30,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      attestations: write
     needs: get-build-number
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -45,6 +46,7 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+          provenance: 'true'
       - name: verify build-gradle behavior
         env:
           DEPLOYED: ${{ steps.build.outputs.deployed }}
@@ -60,6 +62,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      attestations: write
     needs: get-build-number
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -75,6 +78,7 @@ jobs:
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
           use-develocity: true
+          provenance: 'true'
       - name: verify build-gradle behavior
         shell: bash
         env:
