@@ -4,6 +4,7 @@ on:
     # Run the workflow every day at 04:00 UTC
     - cron: '0 4 * * *'
   workflow_dispatch:
+  pull_request:
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@feat/mmatuszny/PREQ-2738-build-gradle-fix # dogfood
         with:
           run-shadow-scans: true
           artifactory-reader-role: private-reader
