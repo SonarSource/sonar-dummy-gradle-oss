@@ -1,10 +1,11 @@
 plugins {
-  id "com.gradle.develocity" version "4.2"
+  id "com.gradle.develocity" version "4.0"
   id "com.gradle.common-custom-user-data-gradle-plugin" version "2.3"
 }
 
 develocity {
-  server = "https://develocity.sonar.build"
+  server = "https://develocity-public.staging.sonar.build"
+  accessKey = "je6jelavzexil34d7l7xytdb3mu3ybqmwpfiqxhgxt5zljtkku3a"
   buildScan {
     capture {
       buildLogging = !startParameter.taskNames.contains("properties")
