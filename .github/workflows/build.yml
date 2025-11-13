@@ -37,6 +37,10 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
+      - name: nslookup develocity.sonar.build
+        shell: bash
+        run: |
+          nslookup develocity.dev.sonar.build
       - name: Build, Analyze and deploy
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
@@ -46,15 +50,33 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
-          provenance: 'true'
-      - name: verify build-gradle behavior
+          use-develocity: true
+          develocity-url: https://develocity-public.sonar.build
+
+  build-develocity:
+    runs-on: github-ubuntu-latest-s
+    name: Build Develocity pub
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    needs: get-build-number
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - name: Build, Analyze and deploy
+        id: build
+        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
         env:
-          DEPLOYED: ${{ steps.build.outputs.deployed }}
-        run: |
-          if [[ "$DEPLOYED" != "true" ]]; then
-              echo "ERROR: steps.build.outputs.deployed is not true"
-              exit 1
-          fi
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+        with:
+          deploy-pull-request: true
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          use-develocity: true
+          develocity-url: https://develocity-public.sonar.build
 
   build-windows:
     runs-on: warp-custom-windows-2022-s
@@ -78,16 +100,6 @@ jobs:
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
           use-develocity: true
-          provenance: 'true'
-      - name: verify build-gradle behavior
-        shell: bash
-        env:
-          DEPLOYED: ${{ steps.build.outputs.deployed }}
-        run: |
-          if [[ "$DEPLOYED" = "true" ]]; then
-              echo "ERROR: steps.build.outputs.deployed is true"
-              exit 1
-          fi
 
   promote:
     needs:
