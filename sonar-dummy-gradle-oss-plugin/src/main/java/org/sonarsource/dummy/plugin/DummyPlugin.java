@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2022 SonarSource SA
+ * Copyright (C) 2014-2022 SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
