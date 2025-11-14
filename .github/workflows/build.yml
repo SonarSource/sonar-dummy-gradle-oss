@@ -101,7 +101,28 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/config-gradle@feat/mm/BUILD-9398--set-project-version
+      - uses: SonarSource/ci-github-actions/config-gradle@master
+        env:
+          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+        with:
+          use-develocity: true
+          artifactory-reader-role: private-reader
+      - run: ./gradlew test
+
+  qa-container:
+    runs-on: sonar-xs-sidecar
+    name: QA on Linux
+    permissions:
+      id-token: write
+      contents: write
+    needs: get-build-number
+    container: 460386131003.dkr.ecr.eu-central-1.amazonaws.com/base:latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: SonarSource/ci-github-actions/config-gradle@master
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
@@ -121,7 +142,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/config-gradle@feat/mm/BUILD-9398--set-project-version
+      - uses: SonarSource/ci-github-actions/config-gradle@master
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
