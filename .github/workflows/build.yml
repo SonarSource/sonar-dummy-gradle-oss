@@ -21,7 +21,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+      - uses: SonarSource/ci-github-actions/get-build-number@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
         id: get-build-number
 
   build:
@@ -32,6 +32,8 @@ jobs:
       contents: write
       attestations: write
     needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
@@ -39,9 +41,7 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+        uses: SonarSource/ci-github-actions/build-gradle@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
         with:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
@@ -56,7 +56,68 @@ jobs:
               exit 1
           fi
 
-  build-windows:
+  build-working-directory:
+    runs-on: sonar-s-public
+    name: Build with working directory
+    permissions:
+      id-token: write
+      contents: write
+    needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: subdir
+      - name: Workaround for setup-gradle which has no working-directory input
+        run: |
+          cp subdir/mise.toml mise.toml
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+          working_directory: subdir
+      - uses: SonarSource/ci-github-actions/build-gradle@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
+        with:
+          deploy-pull-request: false
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          working-directory: subdir
+
+  qa-linux-working-directory:
+    runs-on: sonar-s-public
+    name: QA on Linux
+    permissions:
+      id-token: write
+      contents: write
+    needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: subdir
+      - name: Workaround for setup-gradle which has no working-directory input
+        run: |
+          cp subdir/mise.toml mise.toml
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+          working_directory: subdir
+      - uses: SonarSource/ci-github-actions/config-gradle@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
+        with:
+          use-develocity: false
+          artifactory-reader-role: private-reader
+          working-directory: subdir
+      - working-directory: subdir
+        run: ./gradlew test
+
+  build-windows-working-directory:
     runs-on: warp-custom-windows-2022-s
     name: Build Windows
     permissions:
@@ -64,21 +125,31 @@ jobs:
       contents: write
       attestations: write
     needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: subdir
+      - name: Workaround for setup-gradle which has no working-directory input
+        run: |
+          cp subdir/mise.toml mise.toml
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+          working_directory: subdir
+      - uses: SonarSource/ci-github-actions/build-gradle@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
         id: build
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy: false
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
           use-develocity: true
           provenance: 'true'
+          working-directory: subdir
       - name: verify build-gradle behavior
         shell: bash
         env:
@@ -93,15 +164,17 @@ jobs:
     needs:
       - get-build-number
       - build
-      - build-windows
+      - build-working-directory
+      - qa-linux-working-directory
+      - build-windows-working-directory
     runs-on: github-ubuntu-latest-s
     name: Promote
     permissions:
       id-token: write
       contents: write
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+      - uses: SonarSource/ci-github-actions/promote@fix/jcarsique/BUILD-9760-configGradleWorkDir # TEST
         with:
           promote-pull-request: true
