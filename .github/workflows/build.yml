@@ -32,6 +32,8 @@ jobs:
       contents: write
       attestations: write
     needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
@@ -40,8 +42,6 @@ jobs:
       - name: Build, Analyze and deploy
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
@@ -68,6 +68,35 @@ jobs:
           ./gradlew test --info --no-scan | tee qa-test.log
           grep "Downloading https://repox.jfrog.io/artifactory/sonarsource-qa/org/sonarsource/sonarqube/sonar-plugin-api/" qa-test.log
 
+  test-working-directory:
+    runs-on: sonar-s-public
+    name: Test with working-directory
+    permissions:
+      id-token: write
+      contents: write
+    needs:
+      - get-build-number
+      - build
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          path: subdir
+      - name: Workaround for setup-gradle which has no working-directory input
+        run: |
+          cp subdir/mise.toml mise.toml
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: SonarSource/ci-github-actions/config-gradle@master # dogfood
+        with:
+          use-develocity: false
+          artifactory-reader-role: private-reader
+          working-directory: subdir
+      - working-directory: subdir
+        run: ./gradlew test
+
   build-windows:
     runs-on: warp-custom-windows-2022-s
     name: Build Windows
@@ -76,6 +105,8 @@ jobs:
       contents: write
       attestations: write
     needs: get-build-number
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
@@ -83,8 +114,6 @@ jobs:
           version: 2025.7.12
       - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
         id: build
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           deploy: false
           artifactory-reader-role: private-reader
@@ -106,14 +135,15 @@ jobs:
       - get-build-number
       - build
       - build-windows
+      - test-working-directory
     runs-on: github-ubuntu-latest-s
     name: Promote
     permissions:
       id-token: write
       contents: write
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: SonarSource/ci-github-actions/promote@master # dogfood
-        env:
-          BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
           promote-pull-request: true
