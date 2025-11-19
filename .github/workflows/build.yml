@@ -21,7 +21,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+      - uses: SonarSource/ci-github-actions/get-build-number@fix/jcarsique/BUILD-9760-cleanupGradleActions
         id: get-build-number
 
   build:
@@ -39,7 +39,7 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@fix/jcarsique/BUILD-9760-cleanupGradleActions
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
@@ -69,7 +69,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@fix/jcarsique/BUILD-9760-cleanupGradleActions
         id: build
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
@@ -100,7 +100,7 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: SonarSource/ci-github-actions/promote@fix/jcarsique/BUILD-9760-cleanupGradleActions
         env:
           BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
         with:
