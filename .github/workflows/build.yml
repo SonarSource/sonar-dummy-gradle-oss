@@ -55,6 +55,18 @@ jobs:
               echo "ERROR: steps.build.outputs.deployed is not true"
               exit 1
           fi
+      - name: QA test
+        shell: bash
+        env:
+          SONARSOURCE_REPOSITORY: sonarsource-qa
+        run: |
+          # Removing local artifacts to showcase downloading from sonarsource-qa
+          ./gradlew --stop
+          rm -rf ~/.gradle/caches/modules-2/files-2.1/org.sonarsource.sonarqube/sonar-plugin-api/
+          echo "Running QA tests against $ARTIFACTORY_URL/$SONARSOURCE_REPOSITORY..."
+          ./gradlew test --info | tee qa-test.log
+          grep "Added Repox repository at 'https://repox.jfrog.io/artifactory/sonarsource-qa'" qa-test.log
+          grep "Downloading https://repox.jfrog.io/artifactory/sonarsource-qa/org/sonarsource/sonarqube/sonar-plugin-api/" qa-test.log
 
   build-windows:
     runs-on: warp-custom-windows-2022-s
