@@ -18,16 +18,13 @@
  */
 package org.sonarsource.dummy.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 
-public final class DummyPlugin extends SonarPlugin {
+public final class DummyPlugin implements Plugin {
 
-  @SuppressWarnings({"rawtypes"})
   @Override
-  public List getExtensions() {
-    return new ArrayList<>();
+  public void define(Context context) {
+    // Register extensions here if needed
   }
 
 
