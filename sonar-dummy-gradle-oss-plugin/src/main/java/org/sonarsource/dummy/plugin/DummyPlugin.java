@@ -29,7 +29,6 @@ public final class DummyPlugin implements Plugin {
 
 
   public String sayHello() {
-    System.out.println("hello");
     return "hello";
   }
 
