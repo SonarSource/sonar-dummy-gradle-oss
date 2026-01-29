@@ -11,3 +11,4 @@ target/
 *.ipr
 .idea/
 .DS_Store
+.serena/
