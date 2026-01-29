@@ -20,15 +20,17 @@ allprojects {
   apply plugin: 'maven-publish'
   apply plugin: "org.cyclonedx.bom"
 
-  signing {
-    def signingKeyId = findProperty("signingKeyId")
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-    required {
-      return gradle.taskGraph.hasTask(":artifactoryPublish")
+  afterEvaluate {
+    signing {
+      def signingKeyId = findProperty("signingKeyId")
+      def signingKey = findProperty("signingKey")
+      def signingPassword = findProperty("signingPassword")
+      useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+      required {
+        return gradle.taskGraph.hasTask(":artifactoryPublish")
+      }
+      sign publishing.publications
     }
-    sign publishing.publications
   }
 
   tasks.withType(Sign) {
@@ -42,6 +44,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: "jacoco"
   apply plugin: 'com.github.hierynomus.license'
+  apply plugin: 'signing'
 
   java {
     withJavadocJar()
