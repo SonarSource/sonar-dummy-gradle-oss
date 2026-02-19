@@ -21,7 +21,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+      - uses: SonarSource/ci-github-actions/get-build-number@BUILD-9431-group-action-logs-readability # dogfood
         id: get-build-number
 
   build:
@@ -41,7 +41,7 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@BUILD-9431-group-action-logs-readability # dogfood
         with:
           deploy-pull-request: true
           artifactory-reader-role: private-reader
@@ -89,7 +89,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/config-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/config-gradle@BUILD-9431-group-action-logs-readability # dogfood
         with:
           use-develocity: false
           artifactory-reader-role: private-reader
@@ -112,7 +112,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@BUILD-9431-group-action-logs-readability # dogfood
         id: build
         with:
           deploy: false
@@ -144,6 +144,6 @@ jobs:
     env:
       BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: SonarSource/ci-github-actions/promote@BUILD-9431-group-action-logs-readability # dogfood
         with:
           promote-pull-request: true
