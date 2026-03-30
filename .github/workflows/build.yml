@@ -133,9 +133,9 @@ jobs:
               exit 1
           fi
 
-  test-artifact-name:
+  test-job-identifier-linux:
     runs-on: sonar-s-public
-    name: Test artifact-name (${{ matrix.module }})
+    name: Test job-identifier Linux (${{ matrix.module }})
     permissions:
       id-token: write
       contents: write
@@ -157,7 +157,33 @@ jobs:
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
           use-develocity: true
-          artifact-name: ${{ matrix.module }}
+          job-identifier: ${{ matrix.module }}
+
+  test-job-identifier-windows:
+    runs-on: warp-custom-windows-2022-s
+    name: Test job-identifier Windows (${{ matrix.module }})
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    needs: get-build-number
+    strategy:
+      matrix:
+        module: [moduleA, moduleB]
+    env:
+      BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - uses: SonarSource/ci-github-actions/build-gradle@PREQ-4918-support-unique-artifact-names-for-matrix-jobs # test PREQ-4918
+        with:
+          deploy: false
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          use-develocity: true
+          job-identifier: ${{ matrix.module }}
 
   promote:
     needs:
@@ -165,7 +191,8 @@ jobs:
       - build
       - build-windows
       - test-working-directory
-      - test-artifact-name
+      - test-job-identifier-linux
+      - test-job-identifier-windows
     runs-on: github-ubuntu-latest-s
     name: Promote
     permissions:
