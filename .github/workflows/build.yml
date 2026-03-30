@@ -160,7 +160,7 @@ jobs:
           job-identifier: ${{ matrix.module }}
 
   test-job-identifier-windows:
-    runs-on: warp-custom-windows-2022-s
+    runs-on: github-windows-latest-s
     name: Test job-identifier Windows (${{ matrix.module }})
     permissions:
       id-token: write
