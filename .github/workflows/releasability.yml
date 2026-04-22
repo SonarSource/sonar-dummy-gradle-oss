@@ -19,6 +19,9 @@ jobs:
       contents: read
     if: github.event.workflow_run.conclusion == 'success'
     steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+        with:
+          egress-policy: audit
       - uses: SonarSource/gh-action_releasability/releasability-status@v3 # v3
         env:
           GITHUB_TOKEN: ${{ github.token }}
