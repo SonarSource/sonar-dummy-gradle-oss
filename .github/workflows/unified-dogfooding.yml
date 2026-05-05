@@ -26,7 +26,7 @@ jobs:
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
       - name: Run IRIS Analysis
-        uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        uses: SonarSource/unified-dogfooding-actions/run-iris@master # dogfood
         with:
           primary_project_key: "SonarSource_sonar-dummy-gradle-oss"
           primary_platform: "SQC-EU"
