@@ -18,9 +18,12 @@
  */
 package org.sonarsource.dummy.plugin;
 
+import java.util.logging.Logger;
 import org.sonar.api.Plugin;
 
 public final class DummyPlugin implements Plugin {
+
+  private static final Logger LOGGER = Logger.getLogger(DummyPlugin.class.getName());
 
   @Override
   public void define(Context context) {
@@ -28,8 +31,8 @@ public final class DummyPlugin implements Plugin {
   }
 
 
-  public String sayHello() {
-    System.out.println("hello");
+  public static String sayHello() {
+    LOGGER.info("hello");
     return "hello";
   }
 
