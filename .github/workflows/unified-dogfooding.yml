@@ -10,7 +10,7 @@ env:
 
 jobs:
   build:
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     name: Build and run shadow scans
     permissions:
       id-token: write
