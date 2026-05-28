@@ -1,6 +1,5 @@
 name: Update binary release channel pointer
 
-# Dogfood for SonarSource/ci-github-actions/update-release-channel (BUILD-11463).
 # After a successful dispatch, verify the written pointer at:
 #   https://binaries.sonarsource.com/?prefix=Distribution/sonar-dummy-gradle-oss-plugin/
 
