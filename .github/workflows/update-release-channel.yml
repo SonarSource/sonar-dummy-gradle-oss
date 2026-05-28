@@ -1,4 +1,8 @@
-name: Update release channel
+name: Update binary release channel pointer
+
+# Dogfood for SonarSource/ci-github-actions/update-release-channel (BUILD-11463).
+# After a successful dispatch, verify the written pointer at:
+#   https://binaries.sonarsource.com/?prefix=Distribution/sonar-dummy-gradle-oss-plugin/
 
 # yamllint disable-line rule:truthy
 on:
@@ -24,8 +28,8 @@ on:
         default: false
 
 jobs:
-  update-channel:
-    name: Update ${{ inputs.channel }} channel
+  update-release-channel:
+    name: Update '${{ inputs.channel }}' release channel pointer
     runs-on: sonar-xs
     environment: release-channel-admin
     permissions:
