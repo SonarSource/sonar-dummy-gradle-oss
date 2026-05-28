@@ -1,0 +1,40 @@
+name: Update release channel
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version the channel should be updated to point at (e.g. 0.9.0.977).
+        required: true
+        type: string
+      channel:
+        description: Release channel to update.
+        required: true
+        type: choice
+        options:
+          - latest
+          - stable
+          - beta
+          - rc
+      dryRun:
+        description: When true, resolve and print the planned PutObject without writing to S3.
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  update-channel:
+    name: Update ${{ inputs.channel }} channel
+    runs-on: sonar-xs
+    environment: release-channel-admin
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: SonarSource/ci-github-actions/update-release-channel@master # dogfood
+        with:
+          version: ${{ inputs.version }}
+          channel: ${{ inputs.channel }}
+          product: sonar-dummy-gradle-oss-plugin
+          dryRun: ${{ inputs.dryRun }}
