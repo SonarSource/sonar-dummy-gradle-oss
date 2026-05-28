@@ -22,3 +22,17 @@ jobs:
       publicRelease: true
       publishJavadoc: true
       isDummyProject: true
+
+  update-release-channel:
+    name: Update 'latest' release channel pointer
+    needs: release
+    runs-on: sonar-xs
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: SonarSource/ci-github-actions/update-release-channel@master # dogfood
+        with:
+          version: ${{ inputs.version }}
+          channel: latest
+          product: sonar-dummy-gradle-oss-plugin
