@@ -35,7 +35,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: SonarSource/ci-github-actions/update-release-channel@master # dogfood
+      - uses: SonarSource/ci-github-actions/update-release-channel@fix/jkinavoormadam/BUILD-11460-bodyTempfile # dogfood — test PR #275 before revert to @master
         with:
           version: ${{ inputs.version }}
           channel: ${{ inputs.channel }}
