@@ -24,11 +24,13 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
+      - uses: SonarSource/ci-github-actions/get-build-number@feat/jcarsique/BUILD-11521-selfHostedRepox # dogfood
         id: get-build-number
 
   build:
-    runs-on: sonar-s-public
+    runs-on:
+      group: sonar-dev
+      labels: sonar-s
     name: Build
     permissions:
       id-token: write
@@ -44,8 +46,9 @@ jobs:
           version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
-        uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        uses: SonarSource/ci-github-actions/build-gradle@feat/jcarsique/BUILD-11521-selfHostedRepox # dogfood
         with:
+          repox-url: https://repox.dev.sonar.build
           deploy-pull-request: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
@@ -69,10 +72,12 @@ jobs:
           rm -rf ~/.gradle/caches/modules-2/files-2.1/org.sonarsource.sonarqube/sonar-plugin-api/
           echo "Running QA tests against $ARTIFACTORY_URL/$SONARSOURCE_REPOSITORY..."
           ./gradlew test --info --no-scan | tee qa-test.log
-          grep "Downloading https://repox.jfrog.io/artifactory/sonarsource-qa/org/sonarsource/sonarqube/sonar-plugin-api/" qa-test.log
+          grep "Downloading https://repox.dev.sonar.build/artifactory/sonarsource-qa/org/sonarsource/sonarqube/sonar-plugin-api/" qa-test.log
 
   test-working-directory:
-    runs-on: sonar-s-public
+    runs-on:
+      group: sonar-dev
+      labels: sonar-s
     name: Test with working-directory
     permissions:
       id-token: write
@@ -92,8 +97,9 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/config-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/config-gradle@feat/jcarsique/BUILD-11521-selfHostedRepox # dogfood
         with:
+          repox-url: https://repox.dev.sonar.build
           use-develocity: false
           artifactory-reader-role: private-reader
           working-directory: subdir
@@ -115,7 +121,7 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@feat/jcarsique/BUILD-11521-selfHostedRepox # dogfood
         id: build
         with:
           deploy: false
@@ -139,7 +145,9 @@ jobs:
       - build
       - build-windows
       - test-working-directory
-    runs-on: github-ubuntu-latest-s
+    runs-on:
+      group: sonar-dev
+      labels: sonar-xs
     name: Promote
     permissions:
       id-token: write
@@ -150,6 +158,7 @@ jobs:
       - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
         with:
           egress-policy: audit
-      - uses: SonarSource/ci-github-actions/promote@master # dogfood
+      - uses: SonarSource/ci-github-actions/promote@feat/jcarsique/BUILD-11521-selfHostedRepox # dogfood
         with:
+          repox-url: https://repox.dev.sonar.build
           promote-pull-request: true
