@@ -30,7 +30,7 @@ jobs:
   build:
     runs-on:
       group: sonar-dev
-      labels: sonar-s
+      labels: sonar-xs
     name: Build
     permissions:
       id-token: write
@@ -77,7 +77,7 @@ jobs:
   test-working-directory:
     runs-on:
       group: sonar-dev
-      labels: sonar-s
+      labels: sonar-xs
     name: Test with working-directory
     permissions:
       id-token: write
