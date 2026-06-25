@@ -19,7 +19,7 @@ jobs:
   get-build-number:
     outputs:
       BUILD_NUMBER: ${{ steps.get-build-number.outputs.BUILD_NUMBER }}
-    runs-on: sonar-xs-public
+    runs-on: sonar-xs
     name: Get build number
     permissions:
       id-token: write
@@ -28,7 +28,7 @@ jobs:
         id: get-build-number
 
   build:
-    runs-on: sonar-s-public
+    runs-on: sonar-s
     name: Build
     permissions:
       id-token: write
@@ -72,7 +72,7 @@ jobs:
           grep "Downloading https://repox.jfrog.io/artifactory/sonarsource-qa/org/sonarsource/sonarqube/sonar-plugin-api/" qa-test.log
 
   test-working-directory:
-    runs-on: sonar-s-public
+    runs-on: sonar-s
     name: Test with working-directory
     permissions:
       id-token: write
@@ -132,6 +132,20 @@ jobs:
               echo "ERROR: steps.build.outputs.deployed is true"
               exit 1
           fi
+
+  report-ci-metrics:
+    needs:
+      - build
+      - test-working-directory
+      - build-windows
+    if: always() && (github.event_name == 'pull_request' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
+    runs-on: sonar-xs
+    name: Report CI metrics
+    permissions:
+      actions: read
+      pull-requests: write
+    steps:
+      - uses: SonarSource/ci-github-actions/report-ci-metrics@master # dogfood
 
   promote:
     needs:
