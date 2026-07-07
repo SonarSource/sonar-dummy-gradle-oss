@@ -7,7 +7,7 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0  # frozen: v4.3.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -15,16 +15,19 @@ repos:
         args: [--unsafe]  # does not support https://yaml.org/type/merge.html
       - id: check-added-large-files
   - repo: https://github.com/adrienverge/yamllint
-    rev: 9cce2940414e9560ae4c8518ddaee2ac1863a4d2  # frozen: v1.28.0
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # frozen: v1.38.0
     hooks:
       - id: yamllint
         args: [-d, "{extends: default, rules: {line-length: {max: 200}}}"]
   - repo: https://github.com/markdownlint/markdownlint
-    rev: 4089e11ea61317283a50455ff73afe895b9d8b2d  # frozen: v0.11.0
+    rev: d986259fbc9879075b099d1d94955f738e455aea  # frozen: v0.17.0
     hooks:
       - id: markdownlint
+        # v0.17.0 pins language_version: 3.3.0, an exact patch ruby-build no longer lists (mdl only requires ruby >= 3.2).
+        # Use the runner's system ruby instead of letting pre-commit rbenv-install the pruned version.
+        language_version: system
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 78690b6ce14891a2ae695190a74e966217eec3c8  # frozen: 0.33.0
+    rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
     hooks:
       - id: check-github-workflows
       - id: check-renovate
