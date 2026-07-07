@@ -71,6 +71,8 @@ subprojects {
 
   def bomFile = layout.buildDirectory.file('reports/bom.json')
   cyclonedxBom {
+    // cyclonedx-gradle-plugin 2.x+ defaults to build/reports/cyclonedx/bom.json; pin it back explicitly.
+    jsonOutput.set(bomFile)
     outputs.file bomFile
   }
   def bomArtifact = artifacts.add('archives', bomFile.get().asFile) {
