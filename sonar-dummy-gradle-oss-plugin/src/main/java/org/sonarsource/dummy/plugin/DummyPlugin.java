@@ -18,12 +18,13 @@
  */
 package org.sonarsource.dummy.plugin;
 
-import java.util.logging.Logger;
 import org.sonar.api.Plugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 public final class DummyPlugin implements Plugin {
 
-  private static final Logger LOGGER = Logger.getLogger(DummyPlugin.class.getName());
+  private static final Logger LOGGER = Loggers.get(DummyPlugin.class);
 
   @Override
   public void define(Context context) {
