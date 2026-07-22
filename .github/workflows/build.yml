@@ -39,9 +39,9 @@ jobs:
       BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
+      - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
         with:
-          version: 2025.7.12
+          version: 2025.12.13
       - name: Build, Analyze and deploy
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
@@ -89,9 +89,9 @@ jobs:
       - name: Workaround for setup-gradle which has no working-directory input
         run: |
           cp subdir/mise.toml mise.toml
-      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
+      - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
         with:
-          version: 2025.7.12
+          version: 2025.12.13
       - uses: SonarSource/ci-github-actions/config-gradle@master # dogfood
         with:
           use-develocity: false
@@ -112,9 +112,9 @@ jobs:
       BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
+      - uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
         with:
-          version: 2025.7.12
+          version: 2025.12.13
       - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
         id: build
         with:
@@ -161,7 +161,7 @@ jobs:
     env:
       BUILD_NUMBER: ${{ needs.get-build-number.outputs.BUILD_NUMBER }}
     steps:
-      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           egress-policy: audit
       - uses: SonarSource/ci-github-actions/promote@master # dogfood
