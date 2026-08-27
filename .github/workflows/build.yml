@@ -132,7 +132,7 @@ jobs:
       - build
       - build-windows
       - test-working-directory
-    runs-on: github-ubuntu-latest-s
+    runs-on: sonar-s
     name: Promote
     permissions:
       id-token: write
