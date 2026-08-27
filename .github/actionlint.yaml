@@ -1,0 +1,6 @@
+# Configuration for https://github.com/rhysd/actionlint run by pre-commit
+self-hosted-runner:
+  labels:
+    - sonar-s
+    - sonar-xs
+    - warp-custom-windows-2022-s
