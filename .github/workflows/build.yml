@@ -23,6 +23,7 @@ jobs:
     name: Get build number
     permissions:
       id-token: write
+      contents: write
     steps:
       - uses: SonarSource/ci-github-actions/get-build-number@master # dogfood
         id: get-build-number
