@@ -26,6 +26,8 @@ repos:
         # v0.17.0 pins language_version: 3.3.0, an exact patch ruby-build no longer lists (mdl only requires ruby >= 3.2).
         # Use the runner's system ruby instead of letting pre-commit rbenv-install the pruned version.
         language_version: system
+        # MD013 default is 80; .mdl.rb sets line_length to 120 to match .editorconfig.
+        args: [--style, .mdl.rb]
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
     hooks:
