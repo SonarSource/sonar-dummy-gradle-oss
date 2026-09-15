@@ -1,0 +1,6 @@
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+default: true
+
+MD013:
+  line_length: 140
+  tables: false
