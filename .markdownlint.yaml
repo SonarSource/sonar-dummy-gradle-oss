@@ -1,0 +1,9 @@
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+default: true
+
+MD013:
+  line_length: 120
+  tables: false
+
+# README uses "[here]" for the javadoc link; keep original wording.
+MD059: false
