@@ -19,13 +19,10 @@ repos:
     hooks:
       - id: yamllint
         args: [-d, "{extends: default, rules: {line-length: {max: 200}}}"]
-  - repo: https://github.com/markdownlint/markdownlint
-    rev: d986259fbc9879075b099d1d94955f738e455aea  # frozen: v0.17.0
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: e72a3ca1632f0b11a07d171449fe447a7ff6795e  # frozen: v0.48.0
     hooks:
       - id: markdownlint
-        # v0.17.0 pins language_version: 3.3.0, an exact patch ruby-build no longer lists (mdl only requires ruby >= 3.2).
-        # Use the runner's system ruby instead of letting pre-commit rbenv-install the pruned version.
-        language_version: system
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
     hooks:
