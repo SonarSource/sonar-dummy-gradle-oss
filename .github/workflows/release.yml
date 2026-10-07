@@ -14,7 +14,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@master # dogfood
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@feat/mmolnar/BUILD-12902-dropDummyCentralDeployments # BUILD-12902 validation
     with:
       version: ${{ inputs.version }}
       publishToBinaries: true
