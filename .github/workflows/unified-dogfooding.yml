@@ -24,7 +24,7 @@ jobs:
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@feature/ap/SC-60373-wif-sonarqube-cloud-scans # SC-60373 WIF pilot, revert to master
+      - uses: SonarSource/ci-github-actions/build-gradle@f92738b60fafe698bd3675185413313aed66a74e # SC-60373 / #367 pilot only; revert before merge
         with:
           run-shadow-scans: true
           artifactory-reader-role: private-reader
