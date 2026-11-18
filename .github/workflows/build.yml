@@ -25,9 +25,9 @@ jobs:
       attestations: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: SonarSource/mise-action-wrapper@c2a44f2676ca98598415a83c5a4649e6a45a225a # 1.0.3
+      - uses: SonarSource/mise-action-wrapper@65aa289d3f408f4999d13a52a14cde4f54b48442 # 2.0.0
         with:
-          mise-version: 2025.7.12
+          version: 2025.7.12
       - name: Build, Analyze and deploy
         id: build
         uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
@@ -72,9 +72,9 @@ jobs:
       - name: Workaround for setup-gradle which has no working-directory input
         run: |
           cp subdir/mise.toml mise.toml
-      - uses: SonarSource/mise-action-wrapper@c2a44f2676ca98598415a83c5a4649e6a45a225a # 1.0.3
+      - uses: SonarSource/mise-action-wrapper@65aa289d3f408f4999d13a52a14cde4f54b48442 # 2.0.0
         with:
-          mise-version: 2025.7.12
+          version: 2025.7.12
       - uses: SonarSource/ci-github-actions/config-gradle@master # dogfood
         with:
           use-develocity: false
@@ -92,9 +92,9 @@ jobs:
       attestations: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: SonarSource/mise-action-wrapper@c2a44f2676ca98598415a83c5a4649e6a45a225a # 1.0.3
+      - uses: SonarSource/mise-action-wrapper@65aa289d3f408f4999d13a52a14cde4f54b48442 # 2.0.0
         with:
-          mise-version: 2025.7.12
+          version: 2025.7.12
       - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
         id: build
         with:
