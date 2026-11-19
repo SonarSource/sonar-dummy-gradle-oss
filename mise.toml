@@ -1,2 +1,5 @@
 [tools]
-java = "temurin-21.0.7+6.0.LTS"
+java = "corretto-21.0.13.1.2"
+
+[settings]
+minimum_release_age_excludes = ["java"]
