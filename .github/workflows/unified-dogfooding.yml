@@ -4,6 +4,7 @@ on:
     # Run the workflow every day at 04:00 UTC
     - cron: '0 4 * * *'
   workflow_dispatch:
+  pull_request: # SC-60373 WIF pilot only, remove before merge
 
 env:
   CACHE_BACKEND: s3
@@ -23,7 +24,7 @@ jobs:
       - uses: SonarSource/mise-action-wrapper@65aa289d3f408f4999d13a52a14cde4f54b48442 # 2.0.0
         with:
           version: 2025.7.12
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - uses: SonarSource/ci-github-actions/build-gradle@f92738b60fafe698bd3675185413313aed66a74e # SC-60373 / #367 pilot only; revert before merge
         with:
           run-shadow-scans: true
           artifactory-reader-role: private-reader

@@ -1,0 +1,10 @@
+// Pilot only: age the WIF token before the scanner executes.
+gradle.projectsEvaluated {
+  rootProject.tasks.named('sonar') {
+    doFirst {
+      println "WIF pilot delay started at ${java.time.Instant.now()}"
+      Thread.sleep(11 * 60 * 1000L)
+      println "WIF pilot delay finished at ${java.time.Instant.now()}"
+    }
+  }
+}
